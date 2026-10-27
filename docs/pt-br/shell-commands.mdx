@@ -1,0 +1,86 @@
+---
+title: "Comandos essenciais do shell (PT-BR)"
+description: "Referência traduzida dos comandos mais usados no terminal interativo."
+---
+
+Inicie o OpenSRE em um terminal interativo:
+
+```bash
+opensre
+```
+
+Digite um comando iniciado por `/`, como `/help`, ou descreva o que precisa em linguagem natural. Esta página traduz **as explicações**, mas mantém os identificadores reais dos comandos em inglês.
+
+## Ajuda e navegação
+
+| Comando | Para que serve |
+| --- | --- |
+| `/help` | Lista comandos e apresenta instruções |
+| `/?` | Atalho para a ajuda |
+| `/demo` | Abre as demonstrações guiadas |
+| `/status` | Mostra o estado da sessão e as configurações |
+| `/exit` | Encerra o shell |
+| `/quit` | Equivale a `/exit` |
+| `/clear` | Limpa a tela |
+| `/version` | Exibe informações de versão |
+| `/doctor` | Executa diagnósticos locais |
+
+## Sessões e modelos
+
+| Comando | Para que serve |
+| --- | --- |
+| `/cost` | Exibe contagem de tokens e chamadas ao modelo |
+| `/context` | Mostra o conteúdo previsto para a próxima chamada de modelo |
+| `/effort` | Consulta ou altera o esforço de raciocínio |
+| `/sessions` | Lista sessões anteriores |
+| `/resume <id>` | Retoma uma sessão |
+| `/new` | Inicia um novo arquivo de sessão |
+| `/rename <name>` | Renomeia a sessão |
+| `/compact` | Resume o contexto mais antigo |
+| `/model` | Mostra o modelo hospedado gerenciado pela conta |
+| `/memory` | Gerencia a memória do agente |
+
+## Integrações e segurança
+
+| Comando | Para que serve |
+| --- | --- |
+| `/integrations` | Lista, configura, verifica e remove integrações |
+| `/verify` | Verifica conexões |
+| `/health` | Verifica o estado das integrações e do agente |
+| `/mcp` | Gerencia servidores MCP |
+| `/tools` | Lista as ferramentas registradas |
+| `/privacy` | Consulta controles de privacidade e histórico |
+| `/history` | Gerencia o histórico persistido |
+| `/guardrails` | Consulta regras de proteção de dados |
+| `/auto` | Ajusta confirmações exigidas para uso de ferramentas |
+| `/trust` | Alterna o modo de confiança |
+
+**Atenção:** a documentação original informa que níveis de autonomia elevados podem dispensar prompts de aprovação. Revise a configuração antes de usar ferramentas que alterem sistemas.
+
+## Tarefas e automações
+
+| Comando | Para que serve |
+| --- | --- |
+| `/loops` | Gerencia ciclos recorrentes |
+| `/tasks` | Mostra tarefas em execução e recentes |
+| `/work` | Gerencia itens de trabalho |
+| `/cron` | Gerencia entregas agendadas |
+| `/gateway` | Gerencia o gateway |
+| `/alerts` | Exibe alertas recebidos |
+| `/cancel <id>` | Cancela uma tarefa em execução |
+| `/runbooks` | Gerencia fontes de runbooks confiáveis |
+
+## Teclas de atalho
+
+| Tecla | Efeito |
+| --- | --- |
+| Setas para cima/baixo | Percorrem sugestões ou histórico |
+| `Tab` | Completa a sugestão destacada |
+| `Enter` | Seleciona ou executa um comando |
+| `Esc` | Fecha sugestões ou interrompe ações conforme o contexto |
+| `Ctrl+C` | Interrompe o comando atual; repetido pode encerrar o shell |
+| `Ctrl+D` | Encerra um prompt vazio quando nada está executando |
+
+Para comandos avançados, detalhes sobre TTY, execução remota e sintaxe de shell, consulte a [referência original completa](/getting-started/interactive-shell-commands). A lista pode variar de acordo com a versão instalada: use `/help` como fonte definitiva.
+
+> Tradução comunitária. Projeto original: [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre).
