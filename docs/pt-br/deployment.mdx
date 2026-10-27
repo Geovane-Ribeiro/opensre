@@ -1,0 +1,95 @@
+---
+title: "Implantação do OpenSRE (PT-BR)"
+description: "Execute o gateway localmente, em contêiner ou por uma solução gerenciada."
+---
+
+O OpenSRE permite executar um gateway gerenciado pela organização ou hospedar o próprio serviço usando o `Dockerfile` do repositório. Para contêineres locais, consulte [Docker](/install/docker).
+
+## Gateway gerenciado na nuvem
+
+Um administrador provisiona o gateway em [configurações do Agent Backend](https://app.opensre.com/settings/agent-backend). O gateway é vinculado à organização da conta utilizada pelo shell.
+
+Após fazer login com `opensre`, você pode solicitar:
+
+```text
+Check whether my organization's hosted gateway is running.
+Start my organization's hosted gateway.
+Stop my organization's hosted gateway.
+```
+
+Traduções: verificar se o gateway está em execução; iniciar o gateway; interromper o gateway. Consultar a saúde é uma ação somente leitura. Iniciar e interromper exigem aprovação explícita no shell.
+
+**Atenção:** interromper o gateway mantém configurações e credenciais, mas suspende loops remotos e integrações de chat até que ele seja iniciado novamente.
+
+## Hospedagem própria
+
+A imagem do repositório aceita três modos de execução:
+
+| `MODE` | Função |
+| --- | --- |
+| `web` (padrão) | API HTTP, verificações de saúde e recebimento de alertas |
+| `gateway` | Aplicação web, transportes de chat configurados e agendador |
+| `scheduler` | Serviço separado de agendamento de tarefas e loops |
+
+Configure `LLM_PROVIDER` e a credencial correspondente. Por exemplo:
+
+```bash
+LLM_PROVIDER=anthropic
+ANTHROPIC_API_KEY=...
+```
+
+Também são suportadas opções como `openai`, `openrouter`, `trustedrouter`, `deepseek` e `gemini`, com suas chaves específicas. Consulte [provedores de IA](/platform/llm-providers).
+
+Para persistir registros compartilhados do gateway em PostgreSQL, use `DATABASE_URL`. O estado de agendamento utiliza `OPENSRE_HOME` e, quando configurado, as sessões organizacionais podem usar `OPENSRE_CONTEXT_ROOT`. Planeje armazenamento persistente para esses diretórios.
+
+## Gateway local
+
+Para iniciar ou consultar o daemon local:
+
+```bash
+uv run opensre gateway start
+uv run opensre gateway start --foreground
+uv run opensre gateway stop
+uv run opensre gateway status
+```
+
+Por padrão, o servidor escuta na porta `8000`, configurável por `PORT`.
+
+```bash
+curl http://127.0.0.1:8000/ok
+```
+
+Envie um alerta local:
+
+```bash
+curl -X POST http://127.0.0.1:8000/alerts \
+  -H "Content-Type: application/json" \
+  -d '{"text":"Orders pipeline failed with timeout.","source":"dagster"}'
+```
+
+Sem token de autenticação, a rota `/alerts` aceita apenas conexões loopback. Para permitir acesso remoto, configure `OPENSRE_ALERT_LISTENER_TOKEN` e envie o cabeçalho `Authorization: Bearer`. Consulte a [API HTTP em português](/pt-br/api-http).
+
+## Escalabilidade e concorrência
+
+A documentação original recomenda **uma única tarefa de gateway** enquanto o suporte a sessões compartilhadas entre tarefas não for concluído. Não suponha que múltiplas réplicas sejam seguras só por compartilharem arquivos.
+
+Para aumentar a quantidade de interações simultâneas na mesma tarefa:
+
+```bash
+OPENSRE_MAX_CONCURRENT_TURNS=2
+SLACK_GATEWAY_MAX_CONCURRENT=2
+TELEGRAM_GATEWAY_MAX_CONCURRENT=2
+DISCORD_GATEWAY_MAX_CONCURRENT=2
+```
+
+O consumo de memória cresce com a quantidade de interações e tarefas pesadas. Avalie os picos reais antes de ampliar a concorrência. Consulte também `OPENSRE_MAX_CONCURRENT_HEAVY_WORK` e `OPENSRE_SCHEDULER_MAX_CONCURRENT_RUNS` na [referência original](/guides/deployment).
+
+## Requisitos de segurança
+
+- Utilize HTTPS na borda de produção.
+- Armazene chaves em segredos do provedor de infraestrutura, não no repositório.
+- Valide a persistência de dados antes de reiniciar contêineres.
+- Habilite acesso mínimo às integrações.
+- Planeje testes e procedimentos de recuperação antes de automatizar correções.
+
+> Esta é uma tradução comunitária resumida baseada na [documentação oficial de implantação](/guides/deployment). Preserve as configurações técnicas do projeto [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre).
