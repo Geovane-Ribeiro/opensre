@@ -1,0 +1,50 @@
+---
+title: "Perguntas frequentes (PT-BR)"
+description: "Respostas às perguntas mais comuns sobre o OpenSRE."
+---
+
+<AccordionGroup>
+  <Accordion title="O que é o OpenSRE?">
+    O OpenSRE é um framework de código aberto para agentes de IA voltados a SRE que respondem a perguntas sobre sistemas em produção. Ele consulta ferramentas de observabilidade, infraestrutura em nuvem e runbooks, e pode enviar resultados para Slack, arquivos locais ou outros canais. Consulte o [catálogo de integrações](/integrations).
+  </Accordion>
+
+  <Accordion title="Como começo a usar?">
+    Instale o OpenSRE, autentique-se e faça uma pergunta:
+
+    ```bash
+    curl -fsSL https://install.opensre.com | bash -s -- -dc
+    opensre
+    opensre ask "why did checkout latency increase today?"
+    ```
+
+    A pergunta do exemplo significa "Por que a latência do checkout aumentou hoje?". Veja o [início rápido em português](/pt-br/quickstart).
+  </Accordion>
+
+  <Accordion title="Qual opção de implantação devo escolher?">
+    Para começar, a maioria das pessoas utiliza a CLI local: instala, executa `opensre` e configura as integrações com `opensre integrations setup`. Para uma instalação administrada pela organização, consulte a [configuração empresarial](/install/install-enterprise) em [app.opensre.com](https://app.opensre.com). Integrações conectadas pela aplicação web também são utilizadas pelas sessões autenticadas e têm prioridade sobre a configuração local do mesmo serviço.
+
+    Consulte as opções de [implantação](/guides/deployment) para gateways gerenciados e hospedados por você.
+  </Accordion>
+
+  <Accordion title="Posso hospedar o OpenSRE na minha infraestrutura?">
+    Sim. É possível implantar a imagem Docker do repositório nos modos `web`, `gateway` e `scheduler`. Configure `LLM_PROVIDER` e a chave da API correspondente (por exemplo, `ANTHROPIC_API_KEY` quando `LLM_PROVIDER=anthropic`). Veja [Implantação](/guides/deployment) e [Variáveis de ambiente](/install/environment-variables).
+  </Accordion>
+
+  <Accordion title="Quais provedores de modelos são compatíveis?">
+    O shell interativo autenticado usa um modelo hospedado gerenciado pela conta. Outros formatos de execução podem oferecer suporte, conforme a configuração, a Anthropic, OpenAI, OpenRouter, TrustedRouter, DeepSeek, Gemini, Bedrock, Azure OpenAI e provedores via CLI. Consulte [Provedores de LLM](/platform/llm-providers).
+  </Accordion>
+
+  <Accordion title="O OpenSRE funciona com as ferramentas que já usamos?">
+    Em muitos casos, sim. Há integrações com plataformas de observabilidade, como Datadog, Grafana e Sentry; ambientes AWS e Kubernetes; ferramentas de incidentes; bancos de dados e canais de mensagens. Consulte as [integrações](/integrations) e valide a conexão usando `opensre integrations verify`.
+  </Accordion>
+
+  <Accordion title="O que acontece ao executar opensre sem argumentos?">
+    O programa solicita autenticação, caso necessário, e abre um shell interativo. Na primeira execução, apresenta uma demonstração; depois, você pode descrever problemas em linguagem natural. Os comandos `/help`, `/status`, `/demo` e `/verify datadog` estão documentados na [referência do shell](/getting-started/interactive-shell-commands).
+  </Accordion>
+
+  <Accordion title="Como funcionam a segurança e a telemetria?">
+    O OpenSRE oferece [mascaramento reversível](/platform/masking) antes de chamadas a modelos externos e ocultação de informações sensíveis no [histórico do shell](/platform/interactive-shell-privacy). A telemetria anônima pode ser desativada com `OPENSRE_NO_TELEMETRY=1`. Vulnerabilidades podem ser relatadas a `support@opensre.com`.
+  </Accordion>
+</AccordionGroup>
+
+> Tradução comunitária do [FAQ original](/guides/faq), preservando comandos, identificadores e referências ao projeto [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre).
