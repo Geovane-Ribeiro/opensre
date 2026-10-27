@@ -37,7 +37,9 @@
           "pt-br/install",
           "pt-br/install-local",
           "pt-br/features",
-          "pt-br/faq"
+          "pt-br/faq",
+          "pt-br/integrations",
+          "pt-br/shell-commands"
         ]
       },
       {
