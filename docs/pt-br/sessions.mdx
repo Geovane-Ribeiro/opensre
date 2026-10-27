@@ -1,0 +1,87 @@
+---
+title: "Histórico de sessões (PT-BR)"
+description: "Liste, retome e compacte sessões anteriores do OpenSRE."
+---
+
+O OpenSRE mantém um histórico de sessões para que você possa continuar investigações e aproveitar o contexto de conversas anteriores.
+
+## Comandos principais
+
+| Comando | Função |
+| --- | --- |
+| `/sessions` | Lista sessões recentes e permite selecionar uma para retomar |
+| `/resume <id>` | Restaura o contexto de uma sessão anterior |
+| `/resume <id>:<entry>` | Retoma a partir de um ponto específico da sessão |
+| `/compact` | Resume o histórico mais antigo para reduzir o contexto |
+| `/context` | Mostra o contexto e o orçamento de tokens da próxima chamada |
+| `/new` | Abre outro arquivo de sessão, mantendo o contexto atual |
+| `/clear` | Limpa somente a tela, sem apagar a sessão |
+
+## Listar sessões
+
+No shell, digite:
+
+```text
+/sessions
+```
+
+No terminal interativo, use as setas para selecionar, `Enter` para retomar e `Esc` para fechar. O seletor mostra até 20 sessões recentes. Quando a saída é direcionada para outro programa, é exibida uma tabela com identificadores, datas, duração e quantidade de interações.
+
+## Retomar uma investigação
+
+Você pode informar o identificador ou um prefixo sem ambiguidades:
+
+```text
+/resume 9b2e4f7a
+```
+
+Também é possível retomar diretamente pela CLI:
+
+```bash
+opensre --resume <uuid>
+```
+
+Para recuperar um ponto específico de ramificação:
+
+```text
+/resume 9b2e4f7a:abc123
+```
+
+Quando houver uma entrada de compactação, o resumo salvo será recuperado antes das mensagens preservadas. O OpenSRE restaura o histórico da conversa e o contexto de infraestrutura que foi descoberto. Preferências como nível de confiança e esforço de raciocínio são específicas da sessão e não são restauradas necessariamente.
+
+Você também pode procurar sessões por parte do nome usando `/resume`; se houver ambiguidade, o aplicativo solicitará mais detalhes.
+
+## Começar outra sessão
+
+```text
+/new
+```
+
+Esse comando cria um novo arquivo de sessão e carrega o contexto conversacional. Para apenas limpar a tela, use `/clear`.
+
+## Compactar o histórico
+
+```text
+/compact
+```
+
+A compactação resume trechos antigos e preserva as interações recentes. O resumo fica salvo para futuras retomadas. O OpenSRE também pode compactar automaticamente quando o histórico se aproxima do limite configurado.
+
+| Variável | Padrão | Finalidade |
+| --- | --- | --- |
+| `OPENSRE_HISTORY_TOKEN_BUDGET` | `48000` | Orçamento estimado de tokens do histórico |
+| `OPENSRE_HISTORY_TOOL_RESULT_CHARS` | `8000` | Quantidade de caracteres de resultados de ferramentas preservados |
+| `OPENSRE_LLM_COMPACTION` | `1` | Altere para `0` para não usar o modelo na compactação |
+| `OPENSRE_STRUCTURED_HISTORY` | `1` | Controla o formato estruturado do histórico |
+
+## Dados armazenados e privacidade
+
+As sessões são armazenadas como arquivos em `~/.opensre/sessions/`. O projeto documenta o armazenamento de mensagens, chamadas de ferramentas, resultados, informações de infraestrutura e resumos.
+
+O histórico pode conter dados operacionais sensíveis. Padrões de credenciais conhecidos são ocultados em determinados registros, mas isso não garante a remoção de todas as informações sensíveis. Consulte a [documentação de privacidade](/platform/interactive-shell-privacy).
+
+## Referência completa
+
+Esta página explica os recursos principais. Para detalhes de rastreamento de decisões, atalhos, formatos internos e registros de diagnóstico, consulte [Session History](/platform/sessions).
+
+> Tradução comunitária baseada na documentação original de [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre). Os comandos continuam com seus nomes originais.
