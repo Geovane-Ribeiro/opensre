@@ -39,7 +39,9 @@
           "pt-br/features",
           "pt-br/faq",
           "pt-br/integrations",
-          "pt-br/shell-commands"
+          "pt-br/shell-commands",
+          "pt-br/api-http",
+          "pt-br/masking"
         ]
       },
       {
