@@ -43,7 +43,8 @@
           "pt-br/api-http",
           "pt-br/masking",
           "pt-br/headless-cli",
-          "pt-br/python-api"
+          "pt-br/python-api",
+          "pt-br/deployment"
         ]
       },
       {
