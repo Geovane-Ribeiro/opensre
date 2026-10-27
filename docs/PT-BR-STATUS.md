@@ -48,3 +48,10 @@ Os textos ingleses originais continuam disponíveis. Os guias traduzidos preserv
 ## Observação da execução mais recente
 
 Foi tentado obter o repositório completo por Git, mas a rede do ambiente de execução não conseguiu resolver o domínio do GitHub. As mudanças foram feitas por API do GitHub e conferidas por leitura dos arquivos. **Não é possível declarar a tradução total concluída**: páginas não traduzidas, interface e prompts internos continuam pendentes. As páginas adicionadas nesta etapa são traduções resumidas com vínculos à documentação original, e não traduções integrais de todos os guias.
+
+## Novas páginas desta etapa
+
+- `docs/pt-br/headless-cli.mdx`: guia resumido da CLI sem interação, entrada de arquivos, permissões e JSON.
+- `docs/pt-br/python-api.mdx`: guia introdutório de uso da API Python, sessões e triagem de alertas.
+
+O projeto continua **parcialmente traduzido**. A documentação original mais extensa não foi traduzida integralmente, e as interfaces executáveis e prompts dos agentes não foram localizados e testados. Não foram executados testes automatizados de regressão ou renderização do Mintlify nesta etapa.
