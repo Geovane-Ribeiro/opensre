@@ -1,0 +1,58 @@
+---
+title: "Linux (PT-BR)"
+description: "Instale o OpenSRE em um computador Linux ou máquina virtual."
+---
+
+Instale o OpenSRE em um notebook, desktop ou máquina virtual Linux, entre na sua conta e faça sua primeira pergunta.
+
+## 1. Instalação
+
+```bash
+curl -fsSL https://install.opensre.com | bash -s -- -dc
+```
+
+Em geral, não é necessário `sudo`. Se o comando `opensre` não for encontrado depois da instalação, abra um novo terminal ou adicione ao `PATH` o diretório indicado pelo instalador (frequentemente `~/.local/bin`).
+
+> Antes da execução, examine o conteúdo do instalador remoto e confirme sua procedência.
+
+### Compatibilidade dos binários
+
+Os binários Linux pré-compilados exigem **glibc 2.35 ou superior** (como no Ubuntu 22.04 ou distribuição equivalente). Eles não funcionam no Alpine Linux. Utilize uma distribuição compatível ou consulte o [guia Docker em português](/pt-br/docker).
+
+## 2. Configuração inicial
+
+```bash
+opensre
+```
+
+Crie uma conta ou entre na sua conta OpenSRE para ativar o modelo hospedado. No primeiro acesso, você poderá escolher a demonstração de análise de CI/CD de um repositório da máquina ou pressionar **E** para ignorá-la.
+
+Para conectar ferramentas:
+
+```bash
+opensre integrations setup <service>
+```
+
+Para verificar as integrações:
+
+```bash
+opensre integrations verify
+```
+
+## 3. Primeira pergunta
+
+Inicie o shell:
+
+```bash
+opensre
+```
+
+Experimente: *why is checkout latency spiking?* (Por que a latência do checkout está aumentando repentinamente?)
+
+## Próximos passos
+
+- [Início rápido em português](/pt-br/quickstart): tutorial completo
+- [Instalação local em português](/pt-br/install-local): notas sobre máquina virtual e servidores
+- [Integrações em português](/pt-br/integrations): ferramentas disponíveis
+
+> Tradução comunitária do [guia Linux original](/install/linux-local). Créditos: [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre).
