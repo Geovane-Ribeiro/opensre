@@ -1,0 +1,58 @@
+---
+title: "Mascaramento de identificadores sensíveis (PT-BR)"
+description: "Oculte identificadores de infraestrutura antes de chamadas a modelos externos."
+---
+
+## Visão geral
+
+O OpenSRE consegue mascarar identificadores de infraestrutura, como nomes de pods, clusters, hosts, contas, serviços, endereços IP e e-mails **antes** de enviar texto para um modelo de IA externo. Em determinados caminhos de execução, os valores originais são restaurados antes de apresentar a resposta.
+
+**O mascaramento vem desativado por padrão** e pode ser ativado por variáveis de ambiente, sem editar o código.
+
+## Como funciona
+
+1. Quando habilitado em um fluxo compatível, o OpenSRE troca identificadores por marcadores estáveis, como `<POD_0>`, `<NAMESPACE_0>` ou `<CLUSTER_1>`.
+2. O modelo recebe o texto mascarado, sem os identificadores originais naquele envio.
+3. Quando o mapa `masking_map` está disponível, os valores podem ser restaurados no estado e nas respostas.
+4. Alguns canais de mensagens, como Slack, podem executar uma restauração final.
+
+O mesmo identificador recebe o mesmo marcador durante uma sessão. **A cobertura não é universal:** na implementação documentada, o mascaramento depende de caminhos específicos, como algumas ferramentas de correção do GitHub e Sentry e certos fluxos de execução de agentes por CLI. Verifique seu caminho de execução antes de confiar nessa proteção.
+
+## Variáveis de ambiente
+
+| Variável | Padrão | Finalidade |
+| --- | --- | --- |
+| `OPENSRE_MASK_ENABLED` | `false` | Ativa o mascaramento com `true`, `1`, `yes` ou `on`. |
+| `OPENSRE_MASK_KINDS` | `pod,namespace,cluster,hostname,account_id,ip_address,email,service_name` | Lista de tipos separados por vírgula. Tipos desconhecidos geram aviso. |
+| `OPENSRE_MASK_EXTRA_REGEX` | Vazio | Objeto JSON opcional de rótulos e expressões regulares para identificadores personalizados. |
+
+## Identificadores reconhecidos
+
+| Tipo | Exemplo de entrada | Marcador |
+| --- | --- | --- |
+| `pod` | `etl-worker-7d9f8b-xkp2q` | `<POD_0>` |
+| `namespace` | `kube_namespace:tracer-test` | `kube_namespace:<NAMESPACE_0>` |
+| `cluster` | `eks_cluster:prod-us-east-1` | `eks_cluster:<CLUSTER_0>` |
+| `service_name` | `service:checkout-api` | `service:<SERVICE_NAME_0>` |
+| `hostname` | `kind-control-plane` | `<HOSTNAME_0>` |
+| `account_id` | `123456789012` | `<ACCOUNT_ID_0>` |
+| `ip_address` | `192.168.1.50` | `<IP_ADDRESS_0>` |
+| `email` | `alice@example.com` | `<EMAIL_0>` |
+
+## Restauração e guardrails
+
+Para detectores internos e padrões personalizados compatíveis, o projeto descreve a possibilidade de restaurar os valores originais após o mascaramento. Há um exemplo em `tests/masking/test_integration_with_k8s_fixture.py`.
+
+Os **guardrails** complementam o mascaramento. Enquanto o mascaramento reversible pode recuperar identificadores, os guardrails aplicam bloqueios e substituições definitivas por `[REDACTED]` para determinadas informações sensíveis, como chaves de API.
+
+## Exemplo de configuração
+
+```bash
+export OPENSRE_MASK_ENABLED=true
+export OPENSRE_MASK_KINDS=pod,namespace,cluster,hostname
+opensre ask "why is the checkout pod crash-looping?"
+```
+
+Tradução da pergunta: "Por que o pod do checkout está reiniciando continuamente?"
+
+> Tradução comunitária baseada na [documentação original de mascaramento](/platform/masking). A funcionalidade depende das integrações e dos caminhos de execução utilizados.
