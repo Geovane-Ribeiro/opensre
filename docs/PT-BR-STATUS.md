@@ -13,6 +13,10 @@ Este documento acompanha a tradução comunitária do fork [Geovane-Ribeiro/open
 - `docs/pt-br/faq.mdx`: perguntas frequentes traduzidas.
 - `docs/pt-br/install.mdx`: instalação traduzida.
 - `docs/pt-br/install-local.mdx`: instalação local traduzida.
+- `docs/pt-br/install.mdx`: guia de instalação traduzido.
+- `docs/pt-br/install-local.mdx`: guia de instalação local traduzido.
+- `docs/pt-br/integrations.mdx`: visão geral de integrações em português, com catálogo resumido.
+- `docs/pt-br/shell-commands.mdx`: referência resumida de comandos do terminal em português.
 - `docs/docs.json`: seção de navegação PT-BR adicionada.
 
 Os textos ingleses originais continuam disponíveis. Os guias traduzidos preservam comandos executáveis, nomes de variáveis, integrações, links técnicos e os créditos de origem.
@@ -38,3 +42,7 @@ Os textos ingleses originais continuam disponíveis. Os guias traduzidos preserv
 ## Estado de validação
 
 **Alterações confirmadas via API do GitHub.** Não foram executados build, testes automatizados ou prévia gráfica neste ambiente. Portanto, os arquivos traduzidos ainda precisam de validação funcional antes de um merge.
+
+## Observação da execução mais recente
+
+Foi tentado obter o repositório completo por Git, mas a rede do ambiente de execução não conseguiu resolver o domínio do GitHub. As mudanças foram feitas por API do GitHub e conferidas por leitura dos arquivos. **Não é possível declarar a tradução total concluída**: páginas não traduzidas, interface e prompts internos continuam pendentes. As páginas adicionadas nesta etapa são traduções resumidas com vínculos à documentação original, e não traduções integrais de todos os guias.
