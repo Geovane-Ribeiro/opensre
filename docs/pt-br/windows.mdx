@@ -1,0 +1,41 @@
+---
+title: "Windows (PT-BR)"
+description: "Instale o OpenSRE no Windows usando PowerShell."
+---
+
+Abra o PowerShell. O instalador não exige uma sessão com privilégios de administrador.
+
+## 1. Instalar e iniciar o OpenSRE
+
+```powershell
+& ([scriptblock]::Create((irm https://install.opensre.com/install.ps1))) -dc
+```
+
+Revise a origem e o conteúdo do instalador remoto antes da execução.
+
+```powershell
+opensre
+```
+
+Crie uma conta ou entre na sua conta OpenSRE para ativar o modelo hospedado. A primeira tela oferece uma demonstração: escolha a análise de CI/CD de um repositório deste computador ou selecione **E** para ignorar.
+
+O instalador salva `opensre.exe` em `%USERPROFILE%\.local\bin`. Se o comando `opensre` não for encontrado, siga as instruções de PATH mostradas pelo instalador ou abra outro terminal.
+
+## 2. Conectar ferramentas
+
+```bash
+opensre integrations setup <service>
+opensre integrations verify
+```
+
+## 3. Fazer uma pergunta ao agente
+
+No shell interativo, pergunte: *why is checkout latency spiking?* (Por que a latência do checkout está aumentando repentinamente?)
+
+## Próximos passos
+
+- [Início rápido em português](/pt-br/quickstart) — instalação, login e primeira pergunta
+- [Instalação local em português](/pt-br/install-local) — problemas de PATH e conta
+- [Integrações em português](/pt-br/integrations) — conexão com outras ferramentas
+
+> Tradução comunitária da [página original de Windows](/install/windows-local), preservando comandos e referências ao [OpenSRE original](https://github.com/Tracer-Cloud/opensre).
