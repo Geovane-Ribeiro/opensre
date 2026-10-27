@@ -51,7 +51,8 @@
           "pt-br/macos",
           "pt-br/linux",
           "pt-br/windows",
-          "pt-br/alertmanager"
+          "pt-br/alertmanager",
+          "pt-br/github-actions"
         ]
       },
       {
