@@ -17,6 +17,8 @@ Este documento acompanha a tradução comunitária do fork [Geovane-Ribeiro/open
 - `docs/pt-br/install-local.mdx`: guia de instalação local traduzido.
 - `docs/pt-br/integrations.mdx`: visão geral de integrações em português, com catálogo resumido.
 - `docs/pt-br/shell-commands.mdx`: referência resumida de comandos do terminal em português.
+- `docs/pt-br/api-http.mdx`: API HTTP traduzida.
+- `docs/pt-br/masking.mdx`: explicação de mascaramento traduzida.
 - `docs/docs.json`: seção de navegação PT-BR adicionada.
 
 Os textos ingleses originais continuam disponíveis. Os guias traduzidos preservam comandos executáveis, nomes de variáveis, integrações, links técnicos e os créditos de origem.
