@@ -32,8 +32,10 @@
       {
         "group": "Português (Brasil)",
         "pages": [
+          "pt-br/index",
           "pt-br/quickstart",
-          "pt-br/features"
+          "pt-br/features",
+          "pt-br/faq"
         ]
       },
       {
