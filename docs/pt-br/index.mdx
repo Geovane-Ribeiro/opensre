@@ -1,0 +1,77 @@
+---
+title: "Bem-vindo ao OpenSRE (PT-BR)"
+description: "Conheça os recursos do OpenSRE e escolha por onde começar."
+---
+
+<div className="index-actions">
+  <a className="index-action" href="/pt-br/quickstart">Guia de início rápido →</a>
+  <a className="index-action index-action-secondary" href="https://app.opensre.com">Criar uma conta →</a>
+</div>
+
+## Escolha seu caminho
+
+Comece analisando CI/CD, investigando um incidente ou preparando o OpenSRE para sua equipe.
+
+<CardGroup cols={3}>
+  <Card title="Analisar e corrigir CI" icon="code-branch" href="/cicd/overview">
+    Gere um relatório de confiabilidade dos últimos 30 dias, investigue verificações com falha e acompanhe pull requests com um agente.
+  </Card>
+  <Card title="Investigar um incidente" icon="magnifying-glass-chart" href="/pt-br/quickstart">
+    Descreva um alerta ou problema. O OpenSRE pode analisar logs, métricas e implantações das ferramentas conectadas.
+  </Card>
+  <Card title="Usar com sua equipe" icon="building" href="/install/install-enterprise">
+    Confira as opções para uma conta organizacional e um gateway gerenciado.
+  </Card>
+</CardGroup>
+
+## Escolha como executar
+
+<Tabs>
+  <Tab title="Terminal interativo">
+    Instale, faça login e envie solicitações:
+
+    ```bash
+    curl -fsSL https://install.opensre.com | bash -s -- -dc
+    opensre
+    ```
+
+    Para Windows, consulte o [guia de instalação](/install/windows-local). Revise o script remoto antes de executá-lo.
+  </Tab>
+  <Tab title="CLI sem interação">
+    Execute uma tarefa a partir de um script ou pipeline CI:
+
+    ```bash
+    opensre --json ask "how many PRs currently have failing CI in Tracer-Cloud?"
+    ```
+
+    Veja o [guia da CLI](/guides/headless-cli) para saída JSON, permissões e entrada padrão.
+  </Tab>
+  <Tab title="Slack">
+    Converse com o agente usando canais e mensagens diretas após configurar a [integração Slack](/integrations/messaging/slack).
+  </Tab>
+  <Tab title="Gateway gerenciado">
+    Um administrador pode configurar o gateway organizacional em [app.opensre.com](https://app.opensre.com). Veja [Implantação](/guides/deployment).
+  </Tab>
+</Tabs>
+
+## Explore a documentação
+
+- [Início rápido em português](/pt-br/quickstart): instalação e primeira investigação.
+- [Recursos em português](/pt-br/features): funcionalidades disponíveis.
+- [Perguntas frequentes em português](/pt-br/faq): respostas às dúvidas comuns.
+- [CI/CD](/cicd/overview): relatórios, correções e acompanhamento.
+- [Integrações](/integrations): observabilidade, nuvem, código, mensagens e bancos de dados.
+- [Provedores de IA](/platform/llm-providers): opções para configurar modelos.
+- [Implantação](/guides/deployment): execução local ou em servidores.
+
+## Como acontece uma investigação
+
+1. Você informa um alerta ou descreve um problema.
+2. O agente identifica o contexto e as possíveis causas.
+3. Ele consulta logs, métricas e traces nas integrações disponíveis.
+4. Analisa evidências e testa hipóteses.
+5. Entrega uma resposta no terminal ou em outro canal configurado.
+
+<img src="/images/how_tracer_works.png" alt="Diagrama original do fluxo do OpenSRE" />
+
+O OpenSRE é um projeto de [código aberto](https://github.com/Tracer-Cloud/opensre). Esta é uma tradução comunitária no fork [Geovane-Ribeiro/opensre](https://github.com/Geovane-Ribeiro/opensre); ela não substitui a documentação oficial e não altera os componentes executáveis.
