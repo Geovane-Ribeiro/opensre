@@ -1,0 +1,106 @@
+---
+title: "API Python (PT-BR)"
+description: "Integre o agente OpenSRE diretamente em aplicações Python."
+---
+
+A API Python permite utilizar o OpenSRE no mesmo processo de uma aplicação, sem executar a CLI a cada pergunta. Para acesso pela rede, utilize a [API HTTP em português](/pt-br/api-http).
+
+## Pré-requisitos
+
+O instalador da CLI não fornece um pacote Python importável. Para utilizar essa API, instale o projeto a partir do código-fonte:
+
+```bash
+git clone https://github.com/Tracer-Cloud/opensre.git
+cd opensre && make install
+```
+
+Configure o provedor com `opensre onboard`. Execute scripts no ambiente do repositório com `uv run python your_script.py`.
+
+Para registrar os adaptadores:
+
+```python
+from bootstrap.process import EMBEDDED_PROFILE, configure_process
+
+configure_process(EMBEDDED_PROFILE)
+```
+
+## Criar uma sessão
+
+```python
+from bootstrap.process import EMBEDDED_PROFILE, configure_process
+from core.agent_harness import AgentSession
+
+configure_process(EMBEDDED_PROFILE)
+session = AgentSession.start()
+
+result = session.chat("why is checkout-api slow?")
+action_ok = (
+    result.action_result.handled
+    and not result.action_result.has_unhandled_clause
+    and result.action_result.accounting_status == "completed"
+)
+if (result.answered or action_ok) and not result.cancelled:
+    print(result.primary_response_text)
+```
+
+A pergunta significa "Por que a API de checkout está lenta?".
+
+`AgentSession.start()` abre uma sessão e conecta as ferramentas e prompts padrão, mas **não registra os adaptadores automaticamente**. Por isso, execute `configure_process(EMBEDDED_PROFILE)` antes de criar a sessão.
+
+Como alternativa:
+
+```python
+from bootstrap.embedded import start_embedded_session
+
+session = start_embedded_session()
+```
+
+## Investigar alertas automaticamente
+
+Passe dados de um alerta para o agente:
+
+```python
+import json
+from bootstrap.process import EMBEDDED_PROFILE, configure_process
+from core.agent_harness import AgentSession
+
+configure_process(EMBEDDED_PROFILE)
+session = AgentSession.start()
+
+alert_payload = {
+    "alert_name": "HighLatency",
+    "service": "checkout-api",
+    "severity": "warning",
+    "description": "p99 latency exceeded 1200ms in us-east-1",
+}
+
+result = session.chat(f"Triage this alert:\n{json.dumps(alert_payload)}")
+print(result.primary_response_text)
+```
+
+A resposta depende das integrações configuradas e das evidências acessíveis. Antes de automatizar uma ação, valide `result.answered`, `result.cancelled`, `result.action_result.handled` e o estado de execução.
+
+## Conversas com contexto
+
+Cada chamada a `chat()` cria uma nova interação na mesma sessão, permitindo perguntas complementares:
+
+```python
+session.chat("list unresolved Sentry issues from the last 24 hours")
+result = session.chat("which of those affect checkout?")
+```
+
+Para retomar uma sessão persistente:
+
+```python
+from core.agent_harness import AgentSession, SessionConfig
+
+session = AgentSession.start(SessionConfig(session_id="abc123"))
+```
+
+## Aplicações práticas
+
+A API pode ser incorporada a rotinas de triagem de incidentes, análise de pull requests, auditorias de confiabilidade e relatórios de operação. Automatize preferencialmente leituras e diagnósticos antes de permitir modificações de infraestrutura.
+
+Para exemplos completos de tarefas recorrentes, configuração de objetivos, saídas personalizadas e tratamento de erros, consulte a [referência original da API Python](/guides/python-api).
+
+> Esta é uma tradução comunitária introdutória. O código de exemplo mantém os nomes reais de classes, funções e campos. Projeto original: [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre).
