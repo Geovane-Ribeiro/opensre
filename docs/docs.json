@@ -46,7 +46,8 @@
           "pt-br/python-api",
           "pt-br/deployment",
           "pt-br/environment-variables",
-          "pt-br/docker"
+          "pt-br/docker",
+          "pt-br/sessions"
         ]
       },
       {
