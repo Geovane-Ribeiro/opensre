@@ -47,7 +47,9 @@
           "pt-br/deployment",
           "pt-br/environment-variables",
           "pt-br/docker",
-          "pt-br/sessions"
+          "pt-br/sessions",
+          "pt-br/macos",
+          "pt-br/linux"
         ]
       },
       {
