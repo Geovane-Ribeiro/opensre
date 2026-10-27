@@ -42,7 +42,8 @@
           "pt-br/shell-commands",
           "pt-br/api-http",
           "pt-br/masking",
-          "pt-br/headless-cli"
+          "pt-br/headless-cli",
+          "pt-br/python-api"
         ]
       },
       {
