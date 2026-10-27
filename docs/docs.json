@@ -41,7 +41,8 @@
           "pt-br/integrations",
           "pt-br/shell-commands",
           "pt-br/api-http",
-          "pt-br/masking"
+          "pt-br/masking",
+          "pt-br/headless-cli"
         ]
       },
       {
