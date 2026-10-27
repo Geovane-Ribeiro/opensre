@@ -1,0 +1,85 @@
+---
+title: "Docker (PT-BR)"
+description: "Execute o OpenSRE em um contêiner local ou em um servidor."
+---
+
+Use Docker para executar o OpenSRE em um ambiente reproduzível. Para usar o terminal interativo diariamente no próprio computador, a [instalação convencional](/pt-br/install) costuma ser mais simples.
+
+## Pré-requisitos
+
+Instale o Docker para seu sistema operacional:
+
+<CardGroup cols={2}>
+  <Card title="Docker Desktop (macOS)" href="https://docs.docker.com/desktop/install/mac-install/" icon="apple">
+    Instale o Docker Desktop no macOS.
+  </Card>
+  <Card title="Docker Engine (Ubuntu)" href="https://docs.docker.com/engine/install/ubuntu/" icon="linux">
+    Instale o Docker Engine no Ubuntu.
+  </Card>
+</CardGroup>
+
+A documentação original recomenda, como ponto de partida confortável, uma máquina com cerca de **4 núcleos de CPU e 8 GB de RAM**. A necessidade real depende dos modelos e das ferramentas.
+
+## 1. Construir a imagem
+
+No diretório de uma cópia do repositório:
+
+```bash
+docker build -t opensre:latest .
+```
+
+A imagem inclui ferramentas necessárias à execução. Segundo o guia original, na inicialização ela instala a versão atual do canal `main`, portanto **construir a imagem não fixa uma versão específica do aplicativo**. Dentro do contêiner, `opensre update -y` atualiza para uma versão mais recente.
+
+Reconstrua a imagem quando precisar atualizar dependências incluídas nela, como Git, GitHub CLI, Node ou Codex.
+
+## 2. Executar em modo web
+
+Coloque as credenciais do provedor e das integrações em um arquivo `.env` (consulte `.env.example`):
+
+```bash
+docker run --rm -p 8000:8000 --env-file .env opensre:latest
+```
+
+Verifique a saúde do serviço:
+
+```bash
+curl http://localhost:8000/health
+```
+
+Exemplo mínimo de configuração do LLM:
+
+```bash
+LLM_PROVIDER=anthropic
+ANTHROPIC_API_KEY=...
+```
+
+## 3. Executar o gateway (opcional)
+
+Para integrações de mensagens, como Slack, Telegram, Discord e Buzz:
+
+```bash
+docker run --rm -e MODE=gateway --env-file .env opensre:latest
+```
+
+O modo `web` é o padrão e expõe a API HTTP; o modo `gateway` executa o gateway de mensagens e serviços associados. Consulte o [guia de implantação](/pt-br/deployment) para outros modos e arquiteturas.
+
+O gateway exige credenciais do LLM e os tokens das integrações habilitadas.
+
+## 4. Alternativa: instalar a CLI no host
+
+Sem Docker:
+
+```bash
+curl -fsSL https://install.opensre.com | bash -s -- -dc
+opensre
+```
+
+Revise o instalador remoto antes de executá-lo.
+
+## Próximos passos
+
+- [Implantação em português](/pt-br/deployment)
+- [Variáveis de ambiente em português](/pt-br/environment-variables)
+- [API HTTP em português](/pt-br/api-http)
+
+> Tradução comunitária da [documentação original do Docker](/install/docker), preservando comandos e os créditos do [OpenSRE original](https://github.com/Tracer-Cloud/opensre).
