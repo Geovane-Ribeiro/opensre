@@ -30,6 +30,13 @@
     "directory": "card",
     "groups": [
       {
+        "group": "Português (Brasil)",
+        "pages": [
+          "pt-br/quickstart",
+          "pt-br/features"
+        ]
+      },
+      {
         "group": "Welcome",
         "pages": [
           "index",
