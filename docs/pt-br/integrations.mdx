@@ -1,0 +1,64 @@
+---
+title: "Integrações (PT-BR)"
+description: "Conecte observabilidade, nuvem, código, bancos de dados e canais de mensagens ao OpenSRE."
+---
+
+O OpenSRE investiga incidentes consultando as ferramentas que sua equipe já utiliza. Você pode conectar ferramentas para buscar logs e métricas, verificar implantações recentes e compartilhar resultados.
+
+O projeto documenta mais de **60 integrações**. A disponibilidade de cada recurso depende da versão, permissões e configuração.
+
+## Duas formas de configurar
+
+| Forma | Ideal para | Configuração |
+| --- | --- | --- |
+| CLI local | OpenSRE executado no seu computador ou servidor | `opensre integrations setup` e variáveis de ambiente |
+| OpenSRE Cloud | Conectores compartilhados por uma organização | [app.opensre.com](https://app.opensre.com) → Integrations |
+
+As duas formas podem ser usadas separadamente. Se um serviço estiver conectado no aplicativo web e localmente, a conexão do aplicativo tem prioridade para sessões autenticadas.
+
+## Configuração pelo terminal
+
+```bash
+opensre integrations setup
+```
+
+Também é possível configurar variáveis de ambiente, que serão carregadas na próxima execução. Consulte os requisitos específicos na página de cada integração e em [Variáveis de ambiente](/install/environment-variables).
+
+### Verifique suas conexões
+
+```bash
+opensre integrations verify
+opensre integrations verify datadog
+```
+
+No shell interativo, utilize `/integrations list`, `/integrations verify <name>`, `/verify` ou `/health`.
+
+Para registrar instâncias separadas do mesmo provedor, como Grafana de produção e homologação, consulte [múltiplas instâncias](/platform/multi-instance-integrations).
+
+## Catálogo de integrações
+
+| Categoria | Ferramentas |
+| --- | --- |
+| **Monitoramento** | [Azure Monitor](/integrations/monitoring/azure-monitor), [Better Stack](/integrations/monitoring/betterstack), [Datadog](/integrations/monitoring/datadog), [Grafana](/integrations/monitoring/grafana), [New Relic](/integrations/monitoring/new_relic), [OpenObserve](/integrations/monitoring/openobserve), [Splunk](/integrations/monitoring/splunk), [Tempo](/integrations/monitoring/tempo), [Victoria Logs](/integrations/monitoring/victoria_logs) |
+| **Incidentes** | [Alertmanager](/integrations/incidents/alertmanager), [incident.io](/integrations/incidents/incident_io), [PagerDuty](/integrations/incidents/pagerduty), [Sentry](/integrations/incidents/sentry), [ServiceNow](/integrations/incidents/servicenow) |
+| **Nuvem** | [AWS](/integrations/cloud/aws), [Argo CD](/integrations/cloud/argocd), [Helm](/integrations/cloud/helm), [Kubernetes](/integrations/cloud/kubernetes), [Railway](/integrations/cloud/railway), [Vercel](/integrations/cloud/vercel) |
+| **Código e CI** | [GitHub](/integrations/code/github), [GitHub Actions](/integrations/code/github-actions), [GitLab](/integrations/code/gitlab), [Jenkins](/integrations/code/jenkins), [Bitbucket](/integrations/code/bitbucket) |
+| **Colaboração** | [Google Docs](/integrations/collaboration/google-docs), [Jira](/integrations/collaboration/jira), [Trello](/integrations/collaboration/trello) |
+| **Mensagens** | [Slack](/integrations/messaging/slack), [Discord](/integrations/messaging/discord), [Telegram](/integrations/messaging/telegram), [WhatsApp](/integrations/messaging/whatsapp), [SMTP](/integrations/messaging/smtp) |
+| **Bancos de dados** | [PostgreSQL](/integrations/databases/postgresql), [MySQL](/integrations/databases/mysql), [MongoDB](/integrations/databases/mongodb), [Redis](/integrations/databases/redis), [RDS](/integrations/databases/rds), [Snowflake](/integrations/databases/snowflake) |
+| **Fluxos de trabalho** | [Airflow](/integrations/workflows/airflow), [Kafka](/integrations/workflows/kafka), [Prefect](/integrations/workflows/prefect), [RabbitMQ](/integrations/workflows/rabbitmq), [Temporal](/integrations/workflows/temporal) |
+
+A lista acima é um **resumo**. Consulte o [catálogo original completo](/integrations) para todos os conectores disponíveis.
+
+## OpenSRE Cloud
+
+Conecte os serviços em [app.opensre.com](https://app.opensre.com), na seção **Integrations**. O gateway e as sessões autenticadas podem reutilizar as conexões compartilhadas, conforme a configuração de sua organização.
+
+## Cuidados
+
+- Crie credenciais com o menor nível de acesso necessário.
+- Prefira permissões somente leitura ao aprender e investigar incidentes.
+- Não coloque tokens ou senhas em arquivos versionados.
+- Confirme as permissões antes de habilitar remediações automáticas.
+
+> Tradução comunitária baseada na [documentação oficial de integrações](/integrations) e no repositório [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre).
