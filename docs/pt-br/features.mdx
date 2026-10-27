@@ -1,0 +1,91 @@
+---
+title: "Recursos (PT-BR)"
+description: "Principais recursos do OpenSRE: CI/CD, terminal interativo, integrações, privacidade e APIs."
+---
+
+> Tradução comunitária baseada na página [Features](/getting-started/features).
+
+## Destaques
+
+<CardGroup cols={2}>
+  <Card title="CI/CD" icon="code-branch" href="/cicd/overview">
+    Avalie a confiabilidade do CI, corrija verificações com falha e use agentes para acompanhar pull requests.
+  </Card>
+  <Card title="Terminal interativo" icon="terminal" href="/getting-started/interactive-shell-commands">
+    Descreva incidentes em linguagem natural ou utilize comandos com barra.
+  </Card>
+  <Card title="Integrações" icon="plug" href="/integrations">
+    Mais de 60 ferramentas de monitoramento, incidentes, nuvem, código, comunicação e dados.
+  </Card>
+  <Card title="Objetivos" icon="flag" href="/getting-started/goals">
+    Defina um resultado esperado para que o agente trabalhe em várias interações.
+  </Card>
+  <Card title="Mascaramento" icon="shield" href="/platform/masking">
+    Oculte identificadores de pods, hosts e contas ao enviar informações a modelos externos.
+  </Card>
+  <Card title="Mensagens" icon="comments" href="/integrations/messaging">
+    Envie resultados para Slack, Discord, Telegram e outras plataformas.
+  </Card>
+  <Card title="APIs" icon="code" href="/guides/api">
+    Utilize APIs HTTP e Python para receber alertas e incorporar agentes.
+  </Card>
+</CardGroup>
+
+## Lista de funcionalidades
+
+**CI/CD**
+
+- Relatórios de confiabilidade de 30 dias, incluindo o impacto das falhas no tempo de desenvolvimento — [demonstração](/cicd/cicd-analytics-demo).
+- Investigação e reparo de verificações do GitHub Actions com falha em branches ou pull requests — [guia](/cicd/github-ci-fix).
+- Agentes recorrentes para acompanhar o estado do CI e executar reparos delimitados — [guia](/cicd/ci-repair-agent).
+- Varredura somente leitura de falhas em branches e pull requests — [guia](/cicd/github-ci-health-scan).
+
+**Integrações**
+
+- Mais de 60 ferramentas para observabilidade, incidentes, nuvem, código, mensagens, bancos de dados e automação — [catálogo](/integrations).
+- Configuração e validação usando `opensre integrations setup` e `opensre integrations verify`.
+- Várias instâncias do mesmo provedor, por exemplo produção e homologação — [guia](/platform/multi-instance-integrations).
+- Modelos de IA de diversos provedores, incluindo Anthropic, OpenAI, Gemini, Ollama, Bedrock e OpenRouter — [provedores](/platform/llm-providers).
+- Conexões MCP pelo terminal (`/mcp`).
+
+**Terminal interativo**
+
+- Perguntas em linguagem natural, comandos com barra e ferramentas integradas — [assistente](/getting-started/interactive-shell-assistant).
+- Referência dos comandos disponíveis em `/help` — [comandos](/getting-started/interactive-shell-commands).
+- Objetivos persistentes entre interações — [objetivos](/getting-started/goals).
+- Sessões que podem ser listadas, retomadas, resumidas e ramificadas — [sessões](/platform/sessions).
+- Memória de longo prazo entre conversas — [memória](/platform/memory).
+- Ajuste do esforço de raciocínio usando `/effort` ou `OPENSRE_REASONING_EFFORT`.
+
+**Privacidade e segurança**
+
+- Mascaramento reversível de identificadores antes de chamadas a modelos externos — [guia](/platform/masking).
+- Controles de privacidade para o histórico de comandos — [guia](/platform/interactive-shell-privacy).
+- Restrições para bloquear determinados segredos e informações pessoais.
+
+**Mensagens e automação**
+
+- Envio e acionamento de tarefas via Slack, Discord, Telegram e outros serviços — [mensagens](/integrations/messaging).
+- Resumos e processos agendados com cron — [agendamentos](/platform/cron).
+
+**APIs e implantação**
+
+- API HTTP para verificações de saúde e recebimento de alertas — [API HTTP](/guides/api).
+- API Python para incorporar agentes a processos — [API Python](/guides/python-api).
+- CLI local, gateway gerenciado ou execução em Railway, ECS e Vercel — [implantação](/guides/deployment).
+- Formas de instalação local e empresarial — [instalação](/install).
+
+## Próximos passos
+
+<CardGroup cols={2}>
+  <Card title="Início rápido em português" icon="rocket" href="/pt-br/quickstart">
+    Instale, entre na conta e faça sua primeira pergunta.
+  </Card>
+  <Card title="Catálogo de integrações" icon="plug" href="/integrations">
+    Consulte as ferramentas disponíveis por categoria.
+  </Card>
+</CardGroup>
+
+---
+
+**Créditos:** [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre). Versão comunitária brasileira no fork [Geovane-Ribeiro/opensre](https://github.com/Geovane-Ribeiro/opensre).
