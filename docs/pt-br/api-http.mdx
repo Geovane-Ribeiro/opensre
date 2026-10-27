@@ -1,0 +1,57 @@
+---
+title: "API HTTP (PT-BR)"
+description: "Verificações de saúde e recebimento de alertas por HTTP."
+---
+
+O backend do OpenSRE disponibiliza uma API HTTP com FastAPI em `gateway/web/webapp.py`. As rotas usam uma única porta (padrão `8000`). Para usar o agente diretamente no seu código, veja a [API Python](/guides/python-api).
+
+**Em produção, utilize HTTPS**, terminando TLS em um balanceador ou proxy reverso antes da aplicação.
+
+## Autenticação
+
+| Rotas | Quem utiliza | Autenticação |
+| --- | --- | --- |
+| `POST /alerts` | Sistemas de alerta, CI e agendadores | Configure `OPENSRE_ALERT_LISTENER_TOKEN` e envie `Authorization: Bearer <token>`. Sem a variável, apenas clientes loopback são aceitos. |
+| `GET /`, `/health`, `/ok`, `/healthz`, `/readyz` | Verificadores de saúde | Não exige autenticação |
+
+## Saúde do serviço
+
+| Rota | Comportamento |
+| --- | --- |
+| `GET /healthz` | Verifica se o serviço está ativo. Retorna `{"status": "ok"}`. |
+| `GET /readyz` | Verifica se está pronto para receber tráfego. Até a inicialização, retorna `503` e `{"status": "not_ready"}`. |
+| `GET /`, `/health`, `/ok` | Verifica a configuração do modelo, informa versão e `llm_configured`. Retorna `503` enquanto o modelo não estiver configurado. |
+
+```bash
+curl https://<host>/healthz
+curl https://<host>/readyz
+curl https://<host>/health
+```
+
+## Recebimento de alertas
+
+Enfileire um alerta para processamento posterior. A API retorna `202` quando o recebe:
+
+```bash
+curl -X POST "https://<host>/alerts" \
+  -H "Authorization: Bearer $OPENSRE_ALERT_LISTENER_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "CPU above 90% on checkout-db", "source": "grafana"}'
+```
+
+O campo `text` é obrigatório. Os campos `alert_name`, `severity`, `source` e `received_at` são opcionais. Requisições maiores que 1 MiB retornam `413`.
+
+Os alertas são processados pela caixa de entrada do agente. No shell, use `/alerts` para consultá-los; gateways de mensagens podem entregar resultados nos canais vinculados.
+
+## Códigos de retorno
+
+| Código | Significado |
+| --- | --- |
+| `202` | Alerta aceito |
+| `400` | JSON inválido ou campo obrigatório ausente |
+| `401` | Token ausente ou inválido |
+| `403` | Acesso externo sem `OPENSRE_ALERT_LISTENER_TOKEN` |
+| `413` | Corpo do alerta maior que 1 MiB |
+| `503` | Modelo não configurado ou gateway ainda indisponível |
+
+> Tradução comunitária da [API HTTP oficial](/guides/api). Preserve rotas, variáveis, cabeçalhos e formatos JSON exatamente como definidos no projeto [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre).
