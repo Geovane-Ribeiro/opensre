@@ -1,0 +1,129 @@
+---
+title: "Alertmanager (PT-BR)"
+description: "Conecte o Alertmanager para consultar alertas e silenciamentos ativos."
+---
+
+## Visão geral
+
+O OpenSRE consulta o Alertmanager para obter alertas disparados, silenciados ou inibidos e correlacioná-los com outros sinais de um incidente.
+
+## Pré-requisitos
+
+- Alertmanager v0.20 ou superior, acessível pela máquina que executa OpenSRE.
+- URL da instância, como `http://alertmanager.monitoring.svc:9093`.
+- Credenciais, quando necessário: **token bearer ou autenticação básica**, nunca os dois.
+
+## Configuração
+
+### Opção 1: CLI interativa
+
+```bash
+opensre integrations setup alertmanager
+```
+
+O assistente solicita URL e um método de autenticação: **None** (sem autenticação), **Bearer token** ou **Basic auth** (usuário e senha).
+
+### Opção 2: variáveis de ambiente
+
+```bash
+ALERTMANAGER_URL=http://alertmanager.monitoring.svc:9093
+
+# Autenticação por token (opcional)
+ALERTMANAGER_BEARER_TOKEN=your-token
+
+# Autenticação básica (opcional)
+ALERTMANAGER_USERNAME=admin
+ALERTMANAGER_PASSWORD=secret
+```
+
+| Variável | Obrigatória? | Descrição |
+| --- | --- | --- |
+| `ALERTMANAGER_URL` | Sim | URL-base da instância |
+| `ALERTMANAGER_BEARER_TOKEN` | Não | Token bearer para autenticação pelo proxy |
+| `ALERTMANAGER_USERNAME` | Não | Usuário de autenticação básica |
+| `ALERTMANAGER_PASSWORD` | Não | Senha de autenticação básica |
+
+Configure **apenas um** método de autenticação. O OpenSRE rejeita o uso simultâneo de token bearer e credenciais básicas.
+
+### Opção 3: armazenamento persistente
+
+```json
+{
+  "version": 1,
+  "integrations": [
+    {
+      "id": "alertmanager-prod",
+      "service": "alertmanager",
+      "status": "active",
+      "credentials": {
+        "base_url": "http://alertmanager.monitoring.svc:9093",
+        "bearer_token": "",
+        "username": "",
+        "password": ""
+      }
+    }
+  ]
+}
+```
+
+## Credenciais
+
+O Alertmanager normalmente não fornece uma interface própria de chaves de API. A autenticação pode ser configurada em um proxy reverso. Prefira um token ou usuário com permissão somente leitura, já que as ferramentas descritas consultam alertas e silenciamentos.
+
+## Ferramentas
+
+| Ferramenta | Finalidade |
+| --- | --- |
+| `alertmanager_alerts` | Consulta `/api/v2/alerts` e recupera alertas disparados, silenciados e inibidos |
+| `alertmanager_silences` | Consulta `/api/v2/silences` e recupera silenciamentos ativos |
+
+### Uso de `alertmanager_alerts`
+
+- Descobrir alertas disparados durante o mesmo incidente.
+- Verificar se o alerta já foi silenciado ou inibido.
+- Entender o alcance de uma falha a partir dos rótulos.
+- Correlacionar alertas do Prometheus, como memória esgotada, latência e erros.
+
+Cite o nome do alerta na pergunta para restringir a investigação ao rótulo `alertname`.
+
+### Uso de `alertmanager_silences`
+
+- Confirmar se um alerta foi silenciado intencionalmente.
+- Identificar janelas de manutenção sobrepostas ao incidente.
+- Evitar conclusões incorretas baseadas em alertas suprimidos.
+
+## Verificação
+
+```bash
+opensre integrations verify alertmanager
+```
+
+Exemplo de saída bem-sucedida:
+
+```text
+Service: alertmanager
+Status:  passed
+Detail:  Connected to Alertmanager at http://alertmanager.monitoring.svc:9093; cluster status: ready.
+```
+
+## Diagnóstico
+
+| Problema | Correção |
+| --- | --- |
+| `Status: missing` | Configure `ALERTMANAGER_URL` ou execute o assistente |
+| Conexão recusada | Verifique a URL, rede e firewall |
+| `401 Unauthorized` | Configure token bearer **ou** usuário e senha |
+| Ambos os métodos configurados | Remova um deles |
+| Erro SSL | Configure confiança na CA; use HTTP apenas em redes internas adequadamente protegidas |
+| Lista de alertas vazia | Pode ser normal quando nenhum alerta está disparado |
+
+## Segurança
+
+- Prefira um token somente leitura no proxy reverso.
+- Armazene credenciais em um gerenciador de segredos ou em um `.env` não versionado.
+- Em Kubernetes, priorize isolamento de rede para serviços internos.
+- Não exponha uma instância sem autenticação à internet.
+
+Para o laboratório completo de verificação local usando Docker, criação de alertas de teste e silenciamentos, consulte a [página original do Alertmanager](/integrations/incidents/alertmanager).
+
+> Tradução comunitária dos principais recursos. Projeto original: [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre).
