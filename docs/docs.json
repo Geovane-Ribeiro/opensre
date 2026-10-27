@@ -49,7 +49,9 @@
           "pt-br/docker",
           "pt-br/sessions",
           "pt-br/macos",
-          "pt-br/linux"
+          "pt-br/linux",
+          "pt-br/windows",
+          "pt-br/alertmanager"
         ]
       },
       {
