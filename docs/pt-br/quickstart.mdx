@@ -1,0 +1,133 @@
+---
+title: "Início rápido (PT-BR)"
+description: "Instale o OpenSRE, conecte sua conta e execute sua primeira investigação."
+---
+
+> Esta é uma tradução comunitária do [guia original](/getting-started/quickstart). Os comandos, nomes de opções e textos reais exibidos pelo programa continuam no idioma original até que a interface tenha suporte à localização.
+
+## Antes de começar
+
+Você precisa de um terminal aberto em um projeto de código. Um repositório Git é recomendado para acompanhar a demonstração completa.
+
+## Etapa 1: instalar e iniciar o OpenSRE
+
+No macOS ou Linux:
+
+```bash
+curl -fsSL https://install.opensre.com | bash -s -- -dc
+```
+
+Depois, execute:
+
+```bash
+opensre
+```
+
+![Tela de boas-vindas do OpenSRE solicitando autenticação](/images/opensre-welcome.png)
+
+No Windows, abra o PowerShell e execute:
+
+```powershell
+& ([scriptblock]::Create((irm https://install.opensre.com/install.ps1))) -dc
+```
+
+Consulte o [guia para Windows](/install/windows-local). Binários pré-compilados para Linux exigem **glibc 2.35 ou superior** (por exemplo, Ubuntu 22.04+). Confira os [requisitos de plataforma](/install/linux-local#binary-compatibility).
+
+> O comando de instalação executa um script remoto. Confira a origem e revise seu conteúdo antes de executá-lo, especialmente em computadores corporativos.
+
+## Etapa 2: entrar na conta
+
+Na tela inicial, escolha **Sign in or create account** (Entrar ou criar conta).
+
+O navegador abrirá a página de cadastro do OpenSRE, onde você pode usar e-mail ou outro provedor habilitado. Ao entrar, o modelo hospedado pelo OpenSRE será ativado sem exigir uma chave própria de LLM.
+
+Se o GitHub ainda não estiver conectado, a interface poderá mostrar **Connect GitHub to continue** (Conecte o GitHub para continuar). Use **Open the dashboard to connect GitHub** para abrir o painel, conecte sua conta ou solicite a conexão ao administrador do workspace, e então escolha **I've connected GitHub, continue**.
+
+## Etapa 3: escolher a tarefa
+
+O menu inicial apresenta estas opções (mantidas no idioma em que aparecem no terminal):
+
+```text
+What would you like to do?
+  (A) Keep my CI/CD healthy automatically (recommended)
+  (B) Analyze & improve a repo
+  (C) Open the shell
+```
+
+- **A — Manter o CI/CD saudável automaticamente:** abre opções para execução contínua local, reparo na nuvem ou integração com Slack.
+- **B — Analisar e melhorar um repositório:** consulta os últimos 30 dias do GitHub Actions para avaliar a confiabilidade do CI e estimar o tempo perdido com falhas. Requer acesso ao GitHub.
+- **C — Abrir o shell:** entra diretamente no terminal interativo.
+
+Você pode executar `/demo` para abrir novamente o menu ou iniciar com `opensre --skip-onboarding` para pular a introdução.
+
+Para carregar a conexão do GitHub neste computador, use `opensre account login`. Saiba mais na [demonstração de análise de CI/CD](/cicd/cicd-analytics-demo).
+
+## Etapa 4: fazer sua primeira pergunta
+
+**Shell interativo:** inicie o OpenSRE e descreva o problema em linguagem natural.
+
+```bash
+opensre
+```
+
+**Execução única, sem interação:** execute uma pergunta diretamente no terminal ou em uma tarefa de CI.
+
+```bash
+opensre ask "why did checkout latency increase today?"
+```
+
+Tradução da pergunta: **“Por que a latência do checkout aumentou hoje?”**
+
+O agente procura evidências nas integrações conectadas e apresenta uma resposta. Consulte o [guia de CLI sem interação](/guides/headless-cli) para permissões de ferramentas, saída `--json` e códigos de encerramento.
+
+No terminal interativo:
+
+- `/help`: lista os comandos.
+- `/status`: mostra a configuração atual.
+- `/effort`: ajusta o esforço de raciocínio.
+- `/exit`: encerra o shell.
+
+<Frame>
+  ![Execução de uma investigação no OpenSRE](/images/quickstart-investigate.gif)
+</Frame>
+
+Para configurar integrações, execute `opensre integrations setup <service>` ou `/integrations setup <service>`, substituindo `<service>` pelo identificador do serviço.
+
+Exemplos de perguntas após conectar o GitHub:
+
+```text
+analyze Tracer-Cloud/opensre CI/CD performance for the last 30 days
+how many PRs and branches currently have failing CI across all my orgs?
+fix failing checks on Tracer-Cloud/opensre#4597
+```
+
+Esses exemplos fazem referência ao repositório original. **Não execute ações de correção em repositórios de terceiros sem autorização.**
+
+## Etapa 5: atualizar
+
+```bash
+opensre update
+```
+
+## Desinstalação
+
+Para remover o OpenSRE e seus dados locais:
+
+```bash
+opensre uninstall
+```
+
+Use `opensre uninstall --yes` para não exibir a confirmação.
+
+## Solução de problemas
+
+- **Comando `opensre` não encontrado:** reabra o terminal ou adicione ao `PATH` a pasta exibida pelo instalador.
+- **Binário Linux não inicia:** confirme a presença de glibc 2.35+ ou utilize o [guia Docker](/install/docker).
+- **Comando `make` ausente:** consulte o [guia de desenvolvimento](https://github.com/Tracer-Cloud/opensre/blob/main/SETUP.md).
+- **Menu de demonstração não aparece:** execute `opensre` em um terminal interativo e digite `/demo`.
+- **GitHub ainda não conectado:** finalize a integração pelo painel web e tente novamente.
+- **Tela de login reaparece:** execute `opensre account status` para verificar expiração, revogação ou dificuldade de conexão com a aplicação.
+
+---
+
+**Créditos:** [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre). Tradução comunitária mantida no fork [Geovane-Ribeiro/opensre](https://github.com/Geovane-Ribeiro/opensre).
