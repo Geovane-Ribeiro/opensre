@@ -1,0 +1,71 @@
+---
+title: "Variáveis de ambiente essenciais (PT-BR)"
+description: "Configurações principais para modelos, credenciais e execução do OpenSRE."
+---
+
+O OpenSRE utiliza variáveis de ambiente e arquivos `.env` para configurar modelos, integrações e serviços. Esta página apresenta as opções mais importantes; para **todas as variáveis**, consulte a [referência original completa](/install/environment-variables).
+
+## Armazenamento de credenciais
+
+Variáveis do processo e valores do `.env` têm prioridade sobre credenciais salvas no arquivo `~/.opensre/credentials.json`, que o projeto documenta com permissão de proprietário `0600`.
+
+O comando `opensre onboard` e as configurações por `opensre integrations setup` podem salvar credenciais no disco. O OpenSRE não usa o cofre de credenciais do sistema operacional para esse armazenamento.
+
+- Não adicione `.env` ao Git.
+- Utilize um gerenciador de segredos para ambientes de produção.
+- Para configurar credenciais exclusivamente por variáveis e evitar a gravação pelo mecanismo documentado, use `OPENSRE_DISABLE_KEYRING=1` e exporte manualmente as credenciais necessárias.
+
+## Modelos de inteligência artificial
+
+| Variável | Padrão documentado | Finalidade |
+| --- | --- | --- |
+| `LLM_PROVIDER` | `anthropic` | Seleciona o provedor de LLM |
+| `LLM_MAX_TOKENS` | `4096` | Limita a quantidade de tokens na resposta |
+| `OPENSRE_LLM_TRANSPORT` | `sdk` | Escolhe entre SDK nativo e `litellm` |
+| `OPENSRE_LLM_NATIVE_STRUCTURED_OUTPUT` | Não definido | Habilita saída estruturada nativa quando suportada |
+| `OPENSRE_REASONING_EFFORT` | Depende do provedor | Configura esforço de raciocínio, por exemplo `low`, `medium`, `high` ou `xhigh` |
+
+## Chaves de API comuns
+
+| Provedor | Variável de credencial |
+| --- | --- |
+| Anthropic | `ANTHROPIC_API_KEY` |
+| OpenAI | `OPENAI_API_KEY` |
+| OpenRouter | `OPENROUTER_API_KEY` |
+| TrustedRouter | `TRUSTEDROUTER_API_KEY` |
+| DeepSeek | `DEEPSEEK_API_KEY` |
+| Google Gemini | `GEMINI_API_KEY` |
+| Groq | `GROQ_API_KEY` |
+| NVIDIA NIM | `NVIDIA_API_KEY` |
+| Azure OpenAI | `AZURE_OPENAI_API_KEY` |
+
+Ollama pode executar localmente com `OLLAMA_MODEL` e `OLLAMA_HOST`, sem chave de API para seu daemon local. Amazon Bedrock usa as credenciais IAM e região AWS de acordo com a configuração.
+
+## Exemplos
+
+Selecione um provedor:
+
+```bash
+export LLM_PROVIDER=openai
+export OPENAI_API_KEY="sua-chave-aqui"
+```
+
+Para Ollama local:
+
+```bash
+export LLM_PROVIDER=ollama
+export OLLAMA_MODEL=llama3.2
+export OLLAMA_HOST=http://localhost:11434
+```
+
+Esses exemplos pressupõem que as dependências correspondentes já foram instaladas e configuradas. Não exponha chaves reais em comandos que possam aparecer em histórico compartilhado.
+
+## Privacidade e mascaramento
+
+- `OPENSRE_MASK_ENABLED=true`: habilita mascaramento nos caminhos compatíveis.
+- `OPENSRE_MASK_KINDS`: seleciona os identificadores a mascarar.
+- `OPENSRE_PROMPT_LOG_DISABLED=1`: desabilita o registro específico de prompts e respostas documentado pela CLI.
+
+O mascaramento não se aplica automaticamente a todos os caminhos de modelo; confira os detalhes em [Mascaramento (PT-BR)](/pt-br/masking).
+
+> Tradução comunitária introdutória baseada em [Environment Variables](/install/environment-variables). Não é uma lista exaustiva; confira os valores atuais no projeto [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre).
