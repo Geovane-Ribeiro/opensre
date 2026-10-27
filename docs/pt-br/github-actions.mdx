@@ -1,0 +1,107 @@
+---
+title: "GitHub Actions (PT-BR)"
+description: "Investigue incidentes relacionados a workflows, jobs e logs de etapas com falha."
+---
+
+## Visão geral
+
+As ferramentas de GitHub Actions do OpenSRE ajudam a relacionar incidentes a execuções de workflows. Elas são úteis quando uma implantação falhou, um teste está instável ou uma mudança na configuração ou nas credenciais afetou o ambiente de produção.
+
+**Não é uma integração independente:** utiliza as mesmas credenciais MCP da [integração GitHub](/integrations/code/github). Para correções que modificam o CI, veja [Corrigir GitHub CI](/cicd/github-ci-fix).
+
+## Pré-requisitos
+
+- GitHub conectado pelo [guia de integração](/integrations/code/github).
+- Conjuntos de ferramentas MCP com `actions` habilitado (padrão: `repos,issues,pull_requests,actions`).
+- Token com acesso aos repositórios cujos workflows serão consultados.
+
+## Configuração
+
+```bash
+opensre integrations setup github
+opensre integrations verify github
+```
+
+Confirme que o conjunto de ferramentas do GitHub MCP inclui `actions`. O acesso é controlado pela conexão selecionada no aplicativo OpenSRE. Se uma consulta for rejeitada, revise a conexão, os repositórios autorizados e o acesso ao GitHub Actions.
+
+## Credenciais
+
+Use o mesmo token e as mesmas permissões configurados para [GitHub](/integrations/code/github). Para repositórios privados, o token precisa de acesso explícito ao repositório. Confirme no resultado de verificação que as ferramentas de Actions aparecem.
+
+## Ferramentas disponíveis
+
+| Ferramenta | Utilidade |
+| --- | --- |
+| `list_github_actions_workflow_runs` | Lista execuções recentes e seus estados |
+| `list_github_actions_active_runs` | Consulta execuções aguardando ou em andamento |
+| `list_github_actions_run_jobs` | Lista jobs e resultados das etapas de uma execução |
+| `get_github_actions_step_log` | Recupera o log de uma etapa de job com falha |
+
+### Exemplos de parâmetros
+
+```json
+{
+  "owner": "Tracer-Cloud",
+  "repo": "opensre",
+  "per_page": 10
+}
+```
+
+```json
+{
+  "owner": "Tracer-Cloud",
+  "repo": "opensre",
+  "run_id": 123456789,
+  "job_id": 987654321,
+  "step_name": "Deploy"
+}
+```
+
+## Investigação típica
+
+1. Encontre a execução de workflow ocorrida pouco antes do incidente.
+2. Consulte os jobs e identifique a etapa que falhou.
+3. Leia o log da etapa e procure o erro de implantação ou de teste.
+4. Relacione os dados da execução com commits, pull requests e alterações de configuração ou credenciais.
+
+### Exemplo de análise de causa raiz
+
+Um workflow de implantação com falha pode apresentar:
+
+- uma execução com `conclusion: failure`;
+- um job chamado `deploy`, `release` ou `rollout`;
+- uma etapa chamada `Deploy`, `Apply manifests` ou `Run migrations`.
+
+Essas informações ajudam a investigar a possível ligação entre o incidente e uma alteração recente.
+
+## Verificar a integração
+
+```bash
+opensre integrations verify github
+```
+
+Confira se as ferramentas de Actions aparecem. No REPL, teste a consulta:
+
+```text
+list recent failed workflow runs for Tracer-Cloud/opensre
+```
+
+Tradução: "Liste execuções recentes de workflows com falha do repositório Tracer-Cloud/opensre."
+
+## Solução de problemas
+
+| Sintoma | Ação |
+| --- | --- |
+| Integração GitHub indisponível | Reconecte o GitHub ou revise o acesso aos repositórios |
+| Nenhuma execução retornada | Confira `owner`, `repo` e as permissões do token |
+| Log da etapa vazio | Use o `job_id` e o `step_name` exatos retornados pelos jobs |
+| Conexão MCP falhou | Verifique `GITHUB_MCP_URL` e a [configuração do GitHub](/integrations/code/github#troubleshooting) |
+| Ferramentas de Actions ausentes | Inclua `actions` em `GITHUB_MCP_TOOLSETS` |
+
+## Segurança
+
+- Utilize tokens com o menor privilégio possível e limitados aos repositórios necessários.
+- Essas ferramentas são de leitura; correções de CI que modificam arquivos devem exigir autorização.
+- Armazene tokens em um gerenciador de segredos ou `.env` não versionado.
+
+> Tradução comunitária do [guia GitHub Actions original](/integrations/code/github-actions). Projeto original: [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre).
