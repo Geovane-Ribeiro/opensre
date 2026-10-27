@@ -1,0 +1,54 @@
+---
+title: "macOS (PT-BR)"
+description: "Instale o OpenSRE no Mac e faça sua primeira pergunta."
+---
+
+Instale o OpenSRE no macOS, entre na sua conta e faça uma pergunta ao agente.
+
+## 1. Instalação
+
+```bash
+curl -fsSL https://install.opensre.com | bash -s -- -dc
+```
+
+Normalmente, não é necessário usar `sudo`. Se o terminal apresentar `opensre: command not found`, abra uma nova janela ou adicione ao `PATH` o caminho indicado pelo instalador (frequentemente `~/.local/bin`).
+
+> Revise a procedência e o conteúdo do script remoto antes da execução.
+
+## 2. Configuração inicial
+
+```bash
+opensre
+```
+
+Crie sua conta no OpenSRE ou entre em uma conta existente para ativar o modelo hospedado. Na primeira utilização, o programa oferece uma demonstração: escolha a análise de CI/CD de um repositório local ou selecione **E** para ignorá-la.
+
+Depois, configure as ferramentas necessárias:
+
+```bash
+opensre integrations setup <service>
+```
+
+Verifique as conexões:
+
+```bash
+opensre integrations verify
+```
+
+## 3. Primeira pergunta
+
+Abra o shell:
+
+```bash
+opensre
+```
+
+Exemplo: *why is checkout latency spiking?* (Por que a latência do checkout está aumentando repentinamente?)
+
+## Próximos passos
+
+- [Início rápido em português](/pt-br/quickstart): instruções detalhadas
+- [Instalação local em português](/pt-br/install-local): informações sobre PATH e servidores locais
+- [Integrações em português](/pt-br/integrations): conectar ferramentas
+
+> Tradução comunitária do [guia de macOS original](/install/macos). Créditos: [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre).
