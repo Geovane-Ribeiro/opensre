@@ -1,0 +1,105 @@
+---
+title: "CLI sem interação (PT-BR)"
+description: "Execute uma tarefa do agente OpenSRE diretamente em scripts e pipelines de CI."
+---
+
+O comando `opensre ask` executa uma interação do agente, imprime a resposta e encerra o processo, sem abrir o shell interativo. Por padrão, a execução é salva como uma sessão retomável; use `--ephemeral` para não salvar esse histórico.
+
+O comando utiliza o modelo hospedado da conta autenticada com `opensre account login` ou um provedor configurado com `LLM_PROVIDER` e sua chave. As ferramentas podem ser configuradas por `opensre integrations setup`.
+
+```bash
+opensre ask "why did checkout latency increase today?"
+```
+
+A pergunta significa: "Por que a latência do checkout aumentou hoje?"
+
+## Continuar uma investigação
+
+Após uma execução, o terminal mostra um identificador de sessão e o comando para retomar:
+
+```text
+Session: 489e2ba8-3b7f-4fa2-bcdf-55a93177337c
+Continue: opensre ask --resume 489e2ba8-3b7f-4fa2-bcdf-55a93177337c "<reply>"
+```
+
+Retome com o identificador completo ou um prefixo sem ambiguidades:
+
+```bash
+opensre ask --resume 489e2ba8 "now check the last deployment"
+```
+
+Quando o agente precisar de uma decisão, pode retornar `needs_input`, apresentando alternativas numeradas. Retome a mesma sessão com a resposta:
+
+```bash
+opensre ask --resume 489e2ba8 "1"
+```
+
+Para responder várias perguntas, envie um objeto JSON com as chaves exibidas:
+
+```bash
+opensre ask --resume 489e2ba8 '{"Repository":"1","Window":"2"}'
+```
+
+## Execuções temporárias
+
+Use `--ephemeral` para solicitações que não devem gerar uma sessão retomável:
+
+```bash
+opensre ask --ephemeral "summarize this public status page"
+```
+
+O registro de prompts e respostas tem controle separado. Para desabilitá-lo, configure `OPENSRE_PROMPT_LOG_DISABLED=1`. Veja [privacidade do shell](/platform/interactive-shell-privacy).
+
+## Entrada padrão e anexos de texto
+
+Leia o prompt pela entrada padrão:
+
+```bash
+cat incident-notes.txt | opensre ask -
+```
+
+Envie contexto com `-i` ou `--context-file`:
+
+```bash
+opensre ask -i alert.json "investigate this alert and explain the likely cause"
+```
+
+Você pode correlacionar vários arquivos:
+
+```bash
+opensre ask -i alert.json -i deployment.md "correlate the alert with the recent deployment"
+```
+
+Limites documentados: até **16 arquivos**, cada um com no máximo **64 KiB**, com limite combinado de **128 KiB**. Os arquivos devem ser textos UTF-8 comuns. Dados binários ou vazios são rejeitados. Os anexos são tratados como contexto não confiável.
+
+**Segurança:** revise anexos para não compartilhar credenciais ou dados sigilosos. Seu conteúdo poderá ser enviado ao provedor de LLM configurado.
+
+## Permissões das ferramentas
+
+Ferramentas de consulta podem ser executadas automaticamente. Ferramentas que modificam estado ou exigem aprovação podem ser bloqueadas por padrão. Autorize apenas as ferramentas necessárias àquela execução:
+
+```bash
+opensre ask "inspect the repository and run its focused tests" --allowed-tool shell_run --allowed-tool github_cli
+```
+
+A opção `--allowed-tool` não persiste entre execuções. A opção `--yes` não substitui as autorizações das ferramentas.
+
+**Evite `--dangerously-bypass-approvals`** salvo em ambientes isolados e confiáveis: essa opção permite ferramentas que normalmente exigiriam autorização.
+
+## JSON para automações
+
+Adicione `--json` antes de `ask` para obter saída legível por programas:
+
+```bash
+opensre --json ask "summarize current service health"
+```
+
+A saída contém campos como `status`, `response`, `session_id`, `questions`, `denied_tools` e `error`. Preserve esses nomes em inglês ao desenvolver integrações.
+
+## Diagnóstico
+
+Se não houver autenticação nem provedor configurado, a execução termina antes de chamar o agente. O terminal pode sugerir um comando como `opensre auth login <provider>`.
+
+Confira também a [documentação original completa da CLI sem interação](/guides/headless-cli) para todos os códigos de saída, detalhes sobre JSON e opções avançadas.
+
+> Tradução comunitária do projeto [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre). Comandos e parâmetros foram preservados; esta página é um guia resumido e não substitui a referência oficial.
