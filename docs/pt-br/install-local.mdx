@@ -1,0 +1,78 @@
+---
+title: "Instalação local e on-premises (PT-BR)"
+description: "Execute o OpenSRE em um notebook, máquina virtual ou servidor próprio."
+---
+
+## Pré-requisitos
+
+Tenha um terminal aberto em um projeto de código e, preferencialmente, um repositório Git para acompanhar a demonstração.
+
+## Etapa 1: instale e inicie
+
+macOS ou Linux:
+
+```bash
+curl -fsSL https://install.opensre.com | bash -s -- -dc
+opensre
+```
+
+Windows (PowerShell):
+
+```powershell
+& ([scriptblock]::Create((irm https://install.opensre.com/install.ps1))) -dc
+```
+
+![Tela de boas-vindas do OpenSRE](/images/opensre-welcome.png)
+
+> Revise o script remoto de instalação antes de executá-lo.
+
+Normalmente não é necessário executar com `sudo`. O instalador usa, quando possível, uma pasta gravável presente no PATH; caso contrário, utiliza `~/.local/bin` e mostra como adicioná-la ao PATH.
+
+Confira os requisitos específicos para [macOS](/install/macos), [Linux](/install/linux-local), [Windows](/install/windows-local) ou [Docker](/install/docker).
+
+## Etapa 2: autentique-se
+
+Na tela inicial, escolha **Sign in or create account** (Entrar ou criar conta). Faça login com e-mail ou com um provedor habilitado. A autenticação ativa o modelo hospedado, sem exigir uma chave própria de LLM. Após a confirmação pelo aplicativo web, o terminal interativo será aberto e poderá oferecer demonstrações.
+
+Caso a tela de login reapareça, execute:
+
+```bash
+opensre account status
+```
+
+## Etapa 3: verifique suas integrações
+
+Dentro do shell, valide as ferramentas:
+
+```text
+integrations verify
+```
+
+Para verificar uma única integração:
+
+```text
+integrations verify datadog
+```
+
+Fora do shell interativo, acrescente `opensre` no início do comando, por exemplo: `opensre integrations verify`.
+
+## Etapa 4: faça uma pergunta
+
+Inicie:
+
+```bash
+opensre
+```
+
+Pergunte: *why is checkout latency spiking?* ("Por que a latência do checkout está aumentando repentinamente?"). O agente consulta as ferramentas disponíveis e responde no terminal.
+
+## Onde configurar ferramentas
+
+A lista completa fica na seção [Integrações](/integrations), não na seção de instalação. Consulte a página do provedor para descobrir chaves, permissões e exemplos necessários.
+
+## Leia também
+
+- [Início rápido em português](/pt-br/quickstart)
+- [Implantação](/guides/deployment): gateways e opções hospedadas
+
+> Tradução comunitária de [Local and on-prem setup](/install/install-local), mantendo comandos e identificadores originais.
