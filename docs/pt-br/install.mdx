@@ -1,0 +1,99 @@
+---
+title: "Instalar o OpenSRE (PT-BR)"
+description: "Instale a CLI, autentique-se e comece a conversar com o agente."
+---
+
+## Antes de começar
+
+Tenha um terminal aberto em um projeto de código. Um repositório Git é recomendado para acompanhar toda a demonstração.
+
+## Etapa 1: instalação
+
+<Tabs>
+  <Tab title="macOS e Linux">
+    ```bash
+    curl -fsSL https://install.opensre.com | bash -s -- -dc
+    ```
+
+    No Linux, os binários pré-compilados exigem glibc 2.35 ou superior (como no Ubuntu 22.04). Veja [Linux](/install/linux-local).
+  </Tab>
+  <Tab title="Windows">
+    Abra o PowerShell e execute:
+
+    ```powershell
+    & ([scriptblock]::Create((irm https://install.opensre.com/install.ps1))) -dc
+    ```
+
+    Veja [Windows](/install/windows-local).
+  </Tab>
+</Tabs>
+
+> Esses comandos executam instaladores remotos. Confira a origem e o conteúdo do script antes de executá-lo.
+
+Depois, inicie:
+
+```bash
+opensre
+```
+
+![Tela de boas-vindas da CLI com solicitação de login](/images/opensre-welcome.png)
+
+Problemas de PATH e requisitos de plataforma: [instalação local](/install/install-local).
+
+## Etapa 2: autenticação
+
+Escolha **Sign in or create account** (Entrar ou criar conta) na tela inicial. O navegador abrirá o cadastro do OpenSRE. Entre com seu e-mail ou outro provedor habilitado. O login ativa o modelo hospedado, sem exigir uma chave própria de LLM. Em seguida, a sessão é confirmada e o shell é aberto.
+
+## Etapa 3: escolha uma tarefa
+
+As opções reais do programa aparecem assim:
+
+```text
+What would you like to do?
+  (A) Keep my CI/CD healthy automatically (recommended)
+  (B) Analyze & improve a repo
+  (C) Open the shell
+```
+
+- **A:** manter a saúde do CI/CD automaticamente. Você poderá optar por execução contínua na máquina, reparo único na nuvem ou integração com Slack.
+- **B:** analisar um repositório. O OpenSRE consulta o histórico dos últimos 30 dias do GitHub Actions e apresenta métricas de confiabilidade e impacto no tempo de desenvolvimento. Configure o acesso ao GitHub no aplicativo e execute `opensre account login`, se necessário.
+- **C:** entrar diretamente no shell. Digite `/demo` para voltar ao menu ou use `opensre --skip-onboarding` para ignorá-lo na inicialização.
+
+Consulte a [demonstração de análise de CI/CD](/cicd/cicd-analytics-demo).
+
+## Etapa 4: faça sua primeira pergunta
+
+Por exemplo, pergunte:
+
+```text
+why is checkout latency spiking?
+```
+
+Significa: "Por que a latência do checkout está aumentando repentinamente?"
+
+Configure as ferramentas que o agente poderá consultar:
+
+```bash
+opensre integrations setup <service>
+```
+
+No shell, você também pode usar `/integrations setup github`. Veja o [tutorial completo em português](/pt-br/quickstart).
+
+## Guias por plataforma
+
+| Plataforma | Guia original |
+| --- | --- |
+| macOS | [macOS](/install/macos) |
+| Linux | [Linux local](/install/linux-local) |
+| Windows | [Windows local](/install/windows-local) |
+| Docker | [Docker](/install/docker) |
+
+## Solução de problemas
+
+- **Comando não encontrado:** abra outro terminal ou adicione ao PATH o diretório informado pelo instalador.
+- **Tela de login reaparece:** execute `opensre account status` para verificar o estado da sessão.
+- **Outros erros:** consulte [solução de problemas](/pt-br/quickstart#solução-de-problemas).
+
+Para implantação em servidores ou além de um notebook, veja [Deployment](/guides/deployment).
+
+> Tradução comunitária de [Install OpenSRE](/install). Créditos ao [projeto original](https://github.com/Tracer-Cloud/opensre).
